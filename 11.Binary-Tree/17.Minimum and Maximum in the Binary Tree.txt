@@ -1,0 +1,131 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Minimum and Maximum in the Binary Tree
+Problem Level: MEDIUM
+Problem Description:
+For a given a Binary Tree of type integer, find and return the minimum and the maximum data values.
+Return the output as an object of Pair class, which is already created.
+Note:
+All the node data will be unique and hence there will always exist a minimum and maximum node data.
+
+Input Format:
+The first and the only line of input will contain the node data, all separated by a single space. Since -1 is used as an indication whether the left or right node data exist for root, it will not be a part of the node data.
+
+Output Format:
+The only line of output prints two integers denoting the minimum and the maximum data values respectively. A single line will separate them both.
+
+Constraints:
+2 <= N <= 10^5
+Where N is the total number of nodes in the binary tree.
+
+Time Limit: 1 sec
+
+Sample Input 1:
+8 3 10 1 6 -1 14 -1 -1 4 7 13 -1 -1 -1 -1 -1 -1 -1
+
+Sample Output 1:
+1 14
+
+Sample Input 2:
+10 20 60 -1 -1 3 50 -1 -1 -1 -1
+
+Sample Output 2:
+3 60
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTreeWise(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	pendingNodes.push(NULL);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		if(front==NULL){
+			cout<<endl;
+			if(pendingNodes.size()!=0)
+				pendingNodes.push(NULL);
+		}
+		if(front!=NULL){
+			cout<<front->data<<" ";
+			if(front->left)
+				pendingNodes.push(front->left);
+			if(front->right)
+				pendingNodes.push(front->right);
+		}
+	}
+}
+
+void findMaxMin(TreeNode<int>* root,int *max,int *min){
+	if(root==NULL)
+		return;
+	if(root->data>*max)
+		*max=root->data;
+	if(root->data<*min)
+		*min=root->data;
+	findMaxMin(root->left,max,min);
+	findMaxMin(root->right,max,min);
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	cout<<"Tree: \n";
+	printTreeWise(root);
+	int max=INT_MIN;
+	int min=INT_MAX;
+	cout<<"Min Max"<<endl;
+	findMaxMin(root,&max,&min);
+	pair<int,int> result;
+	result.first=min;
+	result.second=max;
+	cout<<result.first<<" "<<result.second;
+}

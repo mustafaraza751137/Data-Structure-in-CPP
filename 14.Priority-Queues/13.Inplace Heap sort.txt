@@ -1,0 +1,66 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Inplace Heap sort
+Problem Level: MEDIUM
+Problem Description:
+Given an integer array of size n. Sort this array (in decreasing order) using heap sort.
+Space complexity should be O(1).
+Input Format :
+Line 1 : Integer n, Array size
+Line 2 : Array elements, separated by space
+
+Output Format :
+Array elements after sorting
+
+Constraints :
+1 <= n <= 10^6
+
+Sample Input:
+6 
+2 6 8 5 4 3
+
+Sample Output:
+8 6 5 4 3 2
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void heapify(int arr[],int n,int i){
+	int minIndex=i;
+	int leftChild=2*i+1;
+	int rightChild=2*i+2;
+	if(leftChild<n && arr[leftChild]<arr[minIndex]){
+		minIndex=leftChild;
+	}
+	if(rightChild<n && arr[rightChild]<arr[minIndex]){
+		minIndex=rightChild;
+	}
+	if(minIndex!=i){
+		swap(arr[minIndex],arr[i]);
+		heapify(arr,n,minIndex);
+	}
+}
+
+void heapSort(int arr[],int n){
+	for(int i=n/2-1;i>=0;i--)
+		heapify(arr,n,i);
+	for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+int main(){
+	int n;
+	cin>>n;
+	int *arr=new int[n];
+	for(int i=0;i<n;i++)
+		cin>>arr[i];
+	heapSort(arr,n);
+	for(int i=0;i<n;i++)
+		cout<<arr[i]<<' ';
+}

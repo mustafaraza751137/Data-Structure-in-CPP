@@ -1,0 +1,118 @@
+@csalgo
+
+Chapter TEST
+Problem Statement: Longest Leaf to root path
+Problem Level: MEDIUM
+Problem Description:
+Given a binary tree, return the longest path from leaf to root. Longest means, a path which contain maximum number of nodes from leaf to root.
+Input format :
+Elements in level order form (separated by space)
+(If any node does not have left or right child, take -1 in its place)
+Line 1 : Binary Tree 1 (separated by space)
+
+Sample Input 1 :
+ 5 6 10 2 3 -1 -1 -1 -1 -1 9 -1 -1
+
+Sample Output 1 :
+9
+3
+6
+5
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTreeWise(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	pendingNodes.push(NULL);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		if(front==NULL){
+			cout<<endl;
+			if(pendingNodes.size()!=0)
+				pendingNodes.push(NULL);
+		}
+		if(front!=NULL){
+			cout<<front->data<<" ";
+			if(front->left)
+				pendingNodes.push(front->left);
+			if(front->right)
+				pendingNodes.push(front->right);
+		}
+	}
+}
+
+vector<int> longestPath(TreeNode<int>* root){
+	vector<int> left;
+	if(root==NULL)
+		return left;
+	left=longestPath(root->left);
+	vector<int> right=longestPath(root->right);
+	if(left.size()>right.size()){
+		left.push_back(root->data);
+		return left;
+	}
+	right.push_back(root->data);
+	return right;
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	cout<<"Tree: \n";
+	vector<int> ans=longestPath(root);
+	for(int i=0;i<ans.size();i++)
+		cout<<ans[i]<<endl;
+}

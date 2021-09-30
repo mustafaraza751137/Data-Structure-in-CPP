@@ -1,0 +1,160 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Remove Min
+Problem Level: MEDIUM
+Problem Description:
+Implement the function RemoveMin for the min priority queue class.
+For a minimum priority queue, write the function for removing the minimum element present. Remove and return the minimum element.
+Note : main function is given for your reference which we are using internally to test the code.
+
+
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class PriorityQueue{
+	vector<int> pq;
+	public:
+		bool isEmpty(){
+			return pq.size()==0;
+		}
+		int getSize(){
+			return pq.size();
+		}
+		int getMin(){
+			if(isEmpty())
+				return 0;
+			return pq[0];
+		}
+		void insert(int data){
+			pq.push_back(data);
+			int child=pq.size()-1;
+			int parent=(child-1)/2;
+			while(child>0 && pq[parent]>pq[child]){
+				swap(pq[parent],pq[child]);
+				child=parent;
+				parent=(child-1)/2;
+			}
+		}
+		int removeMin(){
+			int n=pq.size();
+			int minimum=pq[0];
+			swap(pq[0],pq[n-1]);
+			pq.pop_back();
+			n--;
+			int parent=0;
+			int leftChild=2*parent+1;
+			int rightChild=2*parent+2;
+			while(leftChild<n){
+				int minIndex=parent;
+				if(pq[minIndex]>pq[leftChild]){
+					minIndex=leftChild;
+				}
+				if(rightChild<n && pq[rightChild]<pq[minIndex]){
+					minIndex=rightChild;
+				}
+				if(minIndex==parent)
+					break;
+				swap(pq[minIndex],pq[parent]);
+				parent=minIndex;
+				leftChild=2*parent+1;
+				rightChild=2*parent+2;
+			}
+			return minimum;
+		}
+};
+
+int main(){
+	PriorityQueue p;
+	p.insert(100);
+	p.insert(10);
+	p.insert(15);
+	p.insert(4);
+	p.insert(17);
+	p.insert(21);
+	p.insert(67);
+
+	cout<<p.getSize()<<endl;
+	cout<<p.getMin()<<endl;
+
+	while(!p.isEmpty())
+		cout<<p.removeMin()<<" ";
+	cout<<endl;
+}
+
+
+or
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class PriorityQueue{
+	vector<int> pq;
+	public:
+		bool isEmpty(){
+			return pq.size()==0;
+		}
+		int getSize(){
+			return pq.size();
+		}
+		int getMin(){
+			if(isEmpty())
+				return 0;
+			return pq[0];
+		}
+		void insert(int data){
+			pq.push_back(data);
+			int child=pq.size()-1;
+			int parent=(child-1)/2;
+			while(child>0 && pq[parent]>pq[child]){
+				swap(pq[parent],pq[child]);
+				child=parent;
+				parent=(child-1)/2;
+			}
+		}
+		void heapify(int i){
+			int minIndex=i;
+			int leftChild=2*i+1;
+			int rightChild=2*i+2;
+			if(leftChild<pq.size() && pq[leftChild]<pq[minIndex]){
+				minIndex=leftChild;
+			}
+			if(rightChild<pq.size() && pq[rightChild]<pq[minIndex]){
+				minIndex=rightChild;
+			}
+			if(minIndex!=i){
+				swap(pq[minIndex],pq[i]);
+				heapify(minIndex);
+			}
+		}
+		int removeMin(){
+			int minimum=pq[0];
+			swap(pq[0],pq[pq.size()-1]);
+			pq.pop_back();
+			heapify(0);
+			return minimum;
+		}
+};
+
+int main(){
+	PriorityQueue p;
+	p.insert(100);
+	p.insert(10);
+	p.insert(15);
+	p.insert(4);
+	p.insert(17);
+	p.insert(21);
+	p.insert(67);
+
+	cout<<p.getSize()<<endl;
+	cout<<p.getMin()<<endl;
+
+	while(!p.isEmpty())
+		cout<<p.removeMin()<<" ";
+	cout<<endl;
+}

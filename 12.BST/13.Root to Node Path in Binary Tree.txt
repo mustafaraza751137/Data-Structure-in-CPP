@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+vector<int> path(TreeNode<int>* root,int data){
+	vector<int> ans;
+	if(root==NULL)
+		return ans;
+    if(root->data==data){
+        ans.push_back(data);
+        return ans;
+    }
+    vector<int> left=path(root->left,data);
+	if(left.size()!=0){
+		left.push_back(root->data);
+		return left;
+	}
+	vector<int> right=path(root->right,data);
+	if(right.size()!=0){
+		right.push_back(root->data);
+		return right;
+	}
+	return ans;
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	int data;
+    cin>>data;
+    vector<int> ans=path(root,data);
+	for(int i=0;i<ans.size();i++)
+		cout<<ans[i]<<" ";
+}
+
+
+
+OUTPUT:
+8 5 10 2 6 -1 -1 -1 -1 -1 7 -1 -1
+2
+
+2 5 8

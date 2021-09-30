@@ -1,0 +1,126 @@
+@csalgo
+
+Chapter Assignment
+Problem Statement: Rotate array
+Problem Level: EASY
+Problem Description:
+You have been given a random integer array/list(ARR) of size N. Write a function that rotates the given array/list by D elements(towards the left).
+Note:
+Change in the input array/list itself. You don't need to return or print the elements.
+
+Input format :
+The first line contains an Integer 't' which denotes the number of test cases or queries to be run. Then the test cases follow.
+
+First line of each test case or query contains an integer 'N' representing the size of the array/list.
+
+Second line contains 'N' single space separated integers representing the elements in the array/list.
+
+Third line contains the value of 'D' by which the array/list needs to be rotated.
+
+Output Format :
+For each test case, print the rotated array/list in a row separated by a single space.
+
+Output for every test case will be printed in a separate line.
+
+Constraints :
+1 <= t <= 10^4
+0 <= N <= 10^6
+0 <= D <= N
+Time Limit: 1 sec
+
+Sample Input 1:
+1
+7
+1 2 3 4 5 6 7
+2
+
+Sample Output 1:
+3 4 5 6 7 1 2
+
+Sample Input 2:
+2
+7
+1 2 3 4 5 6 7
+0
+4
+1 2 3 4
+2
+
+Sample Output 2:
+1 2 3 4 5 6 7
+3 4 1 2
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+	int t,n,m,d,i,j;
+	cin>>t;
+	for(i=0;i<t;i++){
+		cin>>n;
+		int *a=new int[n];
+		for(int j=0;j<n;j++)
+			cin>>a[j];
+		cin>>d;
+		int *temp=new int[d];	
+		for(j=0;j<d;j++)
+			temp[j]=a[j];
+		for(j=0;j<(n-d);j++)
+			a[j]=a[j+d];
+		int k=0;
+		for(j=n-d;j<n;j++){
+			a[j]=temp[k];
+			k++;
+		}
+		for(int j=0;j<n;j++)
+			cout<<a[j]<<" ";
+		cout<<endl;
+		delete []temp;
+		delete []a;
+	}
+}
+
+
+OR
+
+#include<bits/stdc++.h>
+using namespace std;
+void Swap(int arr[],int j,int k){
+	while(j<=k){
+		swap(arr[j],arr[k]);
+		j++;
+		k--;
+	}
+}
+
+int main() {
+	int t,n,m,d,i,j,k;
+	cin>>t;
+	for(i=0;i<t;i++){
+		cin>>n;
+		int *a=new int[n];
+		for(int j=0;j<n;j++)
+			cin>>a[j];
+		cin>>d;	
+		
+		j=0,k=n-1;
+		Swap(a,j,k);			//Reverse whole array
+		j=0,k=n-d-1;
+		Swap(a,j,k);			//Reverse first n-d element
+		j=n-d;k=n-1;
+		Swap(a,j,k);			//Reverse last d element
+		
+		for(int j=0;j<n;j++)
+			cout<<a[j]<<" ";
+		cout<<endl;
+		delete []a;
+	}
+}

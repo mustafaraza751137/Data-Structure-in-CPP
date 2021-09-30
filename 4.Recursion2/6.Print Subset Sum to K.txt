@@ -1,0 +1,69 @@
+@csalgo
+
+Chapter Assignment
+Problem Statement: Print Subset Sum to K
+Problem Level: HARD
+Problem Description:
+Given an array A and an integer K, print all subsets of A which sum to K.
+Subsets are of length varying from 0 to n, that contain elements of the array. But the order of elements should remain same as in the input array.
+Note : The order of subsets are not important. Just print them in different lines.
+Input format :
+Line 1 : Size of input array
+Line 2 : Array elements separated by space
+Line 3 : K
+
+Sample Input:
+9 
+5 12 3 17 1 18 15 3 17 
+6
+
+Sample Output:
+3 3
+5 1
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+#include<bits/stdc++.h>
+using namespace std;
+void psubset(int input[],int n,int output[],int m,int k)
+{
+	int sum=0;
+    if(n==0)
+    {
+    	for(int i=0;i<m;i++){
+            sum+=output[i];
+        }
+        if(sum==k){
+        	for(int i=0;i<m;i++)
+            	cout<<output[i]<<" ";
+            cout<<endl;
+    	}
+        return;
+    }
+    
+    int newout[m+1];
+    int i;
+    for(i=0;i<m;i++)
+    {
+        newout[i]=output[i];
+    }
+    
+    newout[i]=input[0];
+    psubset(input+1,n-1,output,m,k);
+    psubset(input+1,n-1,newout,m+1,k);
+}
+
+int main() {
+	int input[1000],length,k;
+	cin >> length;
+	for(int i=0; i < length; i++)
+		cin >> input[i];
+	cin>>k;
+	int output[0];
+    psubset(input,length,output,0,k);
+}

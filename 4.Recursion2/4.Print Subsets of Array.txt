@@ -1,0 +1,69 @@
+@csalgo
+
+Chapter Assignment
+Problem Statement: Print Subsets of Array
+Problem Level: HARD
+Problem Description:
+Given an integer array (of length n), find and print all the subsets of input array.
+Subsets are of length varying from 0 to n, that contain elements of the array. But the order of elements should remain same as in the input array.
+Note : The order of subsets are not important. Just print the subsets in different lines.
+Input format :
+Line 1 : Integer n, Size of array
+Line 2 : Array elements (separated by space)
+
+Constraints :
+1 <= n <= 15
+
+Sample Input:
+3
+15 20 12
+
+Sample Output:
+[] (this just represents an empty array, don't worry about the square brackets)
+12 
+20 
+20 12 
+15 
+15 12 
+15 20 
+15 20 12
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+#include<bits/stdc++.h>
+using namespace std;
+void psubset(int input[],int n,int output[],int m)
+{
+    if(n==0)
+    {
+        for(int i=0;i<m;i++)
+            cout<<output[i]<<" ";
+        cout<<endl;
+        return;
+    }
+    
+    int newout[m+1];
+    int i;
+    for(i=0;i<m;i++)
+    {
+        newout[i]=output[i];
+    }
+    
+    newout[i]=input[0];
+    psubset(input+1,n-1,output,m);
+    psubset(input+1,n-1,newout,m+1);
+}
+
+int main() {
+	int input[1000],length;
+	cin >> length;
+	for(int i=0; i < length; i++)
+		cin >> input[i];
+	int output[0];
+    psubset(input,length,output,0);
+}

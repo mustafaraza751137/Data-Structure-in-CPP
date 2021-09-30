@@ -1,0 +1,156 @@
+@csalgo
+
+Chapter Assignment
+Problem Statement: LCA of BST
+Problem Level: MEDIUM
+Problem Description:
+Given a binary search tree and two nodes, find 'LCA' (Lowest Common Ancestor) of the given two nodes in the BST.
+LCA
+LCA of two nodes A and B is the lowest or deepest node which has both A and B as its descendants.
+
+Example:
+In this example, the green coloured node is the LCA to A and B.
+
+
+Note:
+It is defined that each node is a descendant to itself, so, if there are two nodes X and Y and X has a direct connection from Y, then Y is the lowest common ancestor.
+
+Example:
+    
+Note:
+1. If out of 2 nodes only one node is present, return that node. 
+2. If both are not present, return -1.
+
+Input format:
+The first line of input contains data of the nodes of the tree in level order form. The data of the nodes of the tree is separated by space. If any node does not have left or right child, take -1 in its place. Since -1 is used as an indication whether the left or right nodes exist, therefore, it will not be a part of the data of any node.
+The following line of input contains two integers, denoting the value of data of two nodes of given BST.
+
+Output Format:
+The first and only line of output contains the data associated with the lowest common ancestor node.
+
+Constraints:
+Time Limit: 1 second
+
+Sample Input 1:
+8 5 10 2 6 -1 -1 -1 -1 -1 7 -1 -1
+2 10
+
+Sample Output 1:
+8
+
+Sample Input 2:
+8 5 10 2 6 -1 -1 -1 -1 -1 7 -1 -1
+2 6
+
+Sample Output 2:
+5
+
+Sample Input 3:
+8 5 10 2 6 -1 -1 -1 -1 -1 7 -1 -1
+12 78
+
+Sample Output 3:
+-1
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTreeWise(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	pendingNodes.push(NULL);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		if(front==NULL){
+			cout<<endl;
+			if(pendingNodes.size()!=0)
+				pendingNodes.push(NULL);
+		}
+		if(front!=NULL){
+			cout<<front->data<<" ";
+			if(front->left)
+				pendingNodes.push(front->left);
+			if(front->right)
+				pendingNodes.push(front->right);
+		}
+	}
+}
+int LCA(TreeNode<int>* root,int n1,int n2){
+	if(root==NULL)
+		return -1;
+	if(root->data==n1 || root->data==n2)
+		return root->data;
+	if(root->data>n2){
+		int l=LCA(root->left,n1,n2);
+		int r=-1;
+	}
+	else if(root->data<n1){
+		int r=LCA(root->right,n1,n2);
+		int l=-1;
+	}
+	else if(root->data>n1 && root->data<n2){
+		return root->data;
+	}
+	else
+		return -1;
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	int n1,n2;
+	cin>>n1>>n2;
+	cout<<LCA(root,n1,n2);
+}

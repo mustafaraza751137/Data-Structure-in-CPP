@@ -1,0 +1,126 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Elements Between K1 and K2
+Problem Level: EASY
+Problem Description:
+Given a Binary Search Tree and two integers k1 and k2, find and print the elements which are in range k1 and k2 (both inclusive).
+Print the elements in increasing order.
+Input format:
+The first line of input contains data of the nodes of the tree in level order form. The data of the nodes of the tree is separated by space. If any node does not have left or right child, take -1 in its place. Since -1 is used as an indication whether the left or right nodes exist, therefore, it will not be a part of the data of any node.
+The following line contains two integers, that denote the value of k1 and k2.
+
+Output Format:
+ The first and only line of output prints the elements which are in range k1 and k2 (both inclusive). Print the elements in increasing order.
+
+Constraints:
+Time Limit: 1 second
+
+Sample Input 1:
+8 5 10 2 6 -1 -1 -1 -1 -1 7 -1 -1
+6 10
+
+Sample Output 1:
+6 7 8 10
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTreeWise(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	pendingNodes.push(NULL);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		if(front==NULL){
+			cout<<endl;
+			if(pendingNodes.size()!=0)
+				pendingNodes.push(NULL);
+		}
+		if(front!=NULL){
+			cout<<front->data<<" ";
+			if(front->left)
+				pendingNodes.push(front->left);
+			if(front->right)
+				pendingNodes.push(front->right);
+		}
+	}
+}
+
+vector<int> printNearNodes(TreeNode<int> *root, int low, int high) {
+        //code here 
+        vector<int> v1;
+        vector<int> v2;
+        int data;
+        if(root==NULL)
+            return v1;
+        if(root->data>=low && root->data<=high){
+            v1=printNearNodes(root->left,low,high);
+            v1.push_back(root->data);
+            v2=printNearNodes(root->right,low,high);
+        }
+        else if(root->data>high)
+            v1=printNearNodes(root->left,low,high);
+        else
+            v2=printNearNodes(root->right,low,high);
+        for(int i=0;i<v2.size();i++)
+            v1.push_back(v2[i]);
+        return v1;
+    }
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	int low,high;
+	cin>>low>>high;
+	vector<int> v=printNearNodes(root,low,high);
+	for(int i=0;i<v.size();i++)
+        cout<<v[i]<<" ";
+}

@@ -1,0 +1,96 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Max priority queue class
+Problem Level: MEDIUM
+Problem Description:
+Implement the class for Max Priority Queue which includes following functions -
+1. getSize -
+Return the size of priority queue i.e. number of elements present in the priority queue.
+2. isEmpty -
+Check if priority queue is empty or not. Return true or false accordingly.
+3. insert -
+Given an element, insert that element in the priority queue at the correct position.
+4. getMax -
+Return the maximum element present in the priority queue without deleting. Return -Infinity if priority queue is empty.
+5. removeMax -
+Delete and return the maximum element present in the priority queue. Return -Infinity if priority queue is empty.
+Note : main function is given for your reference which we are using internally to test the class.
+
+
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+class PriorityQueue{
+	vector<int> pq;
+	public:
+		bool isEmpty(){
+			return pq.size()==0;
+		}
+		int getSize(){
+			return pq.size();
+		}
+		int getMax(){
+			if(isEmpty())
+				return 0;
+			return pq[0];
+		}
+		void insert(int data){
+			pq.push_back(data);
+			int child=pq.size()-1;
+			int parent=(child-1)/2;
+			while(child>0 && pq[parent]<pq[child]){
+				swap(pq[parent],pq[child]);
+				child=parent;
+				parent=(child-1)/2;
+			}
+		}
+		int removeMin(){
+			int n=pq.size();
+			int minimum=pq[0];
+			swap(pq[0],pq[n-1]);
+			pq.pop_back();
+			n--;
+			int parent=0;
+			int leftChild=2*parent+1;
+			int rightChild=2*parent+2;
+			while(leftChild<n){
+				int minIndex=parent;
+				if(pq[minIndex]<pq[leftChild]){
+					minIndex=leftChild;
+				}
+				if(rightChild<n && pq[rightChild]>pq[minIndex]){
+					minIndex=rightChild;
+				}
+				if(minIndex==parent)
+					break;
+				swap(pq[minIndex],pq[parent]);
+				parent=minIndex;
+				leftChild=2*parent+1;
+				rightChild=2*parent+2;
+			}
+			return minimum;
+		}
+};
+
+int main(){
+	PriorityQueue p;
+	p.insert(100);
+	p.insert(10);
+	p.insert(15);
+	p.insert(4);
+	p.insert(17);
+	p.insert(21);
+	p.insert(67);
+
+	cout<<p.getSize()<<endl;
+	cout<<p.getMax()<<endl;
+
+	while(!p.isEmpty())
+		cout<<p.removeMin()<<" ";
+	cout<<endl;
+}

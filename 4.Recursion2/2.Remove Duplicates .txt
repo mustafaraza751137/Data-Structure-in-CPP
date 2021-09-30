@@ -1,0 +1,51 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Remove Duplicates 
+Problem Level: EASY
+Problem Description:
+Given a string S, remove consecutive duplicates from it recursively.
+Input Format :
+String S
+
+Output Format :
+Output string
+
+Constraints :
+1 <= |S| <= 10^3
+where |S| represents the length of string
+
+Sample Input 1 :
+aabccba
+
+Sample Output 1 :
+abcba
+
+Sample Input 2 :
+xxxyyyzwwzzz
+
+Sample Output 2 :
+xyzwz
+
+@csalgo
+
+#include<bits/stdc++.h>
+using namespace std;
+void func(char *arr){
+	if(arr[0]=='\0')
+		return;
+	if(arr[0]!=arr[1])
+		func(arr+1);
+	else{
+		for(int j=0;arr[j]!='\0';j++)
+			arr[j]=arr[j+1];
+		func(arr);
+	}
+}
+int main() {
+    char arr[100];
+    cin>>arr;
+    func(arr);
+    cout<<arr;
+	return 0;
+}

@@ -1,0 +1,82 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		vector<TreeNode<T>*> children;
+		TreeNode(T data){
+			this->data=data;
+		}
+};
+
+void printTree(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cout<<front->data<<" : ";
+		for(int i=0;i<front->children.size();i++){
+			cout<<front->children[i]->data<<", ";
+			pendingNodes.push(front->children[i]);
+		}
+		cout<<endl;
+	}
+}
+
+void depthNode(TreeNode<int>* root,int d){
+	if(root==NULL)
+		return;
+	if(d==0){
+        cout<<root->data<<", ";
+    }
+	for(int i=0;i<root->children.size();i++){
+		depthNode(root->children[i],d-1);
+	}
+}
+
+TreeNode<int>* takeInput(){
+	// cout<<"Enter root Node"<<endl;
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		int n;
+		// cout<<"Enter number of child of "<<front->data<<endl;
+		cin>>n;
+		// cout<<"Enter child data"<<endl;
+		for(int i=0;i<n;i++){
+			int childData;
+			cin>>childData;
+			TreeNode<int>* childNode=new TreeNode<int>(childData);
+			front->children.push_back(childNode);
+			pendingNodes.push(childNode);
+		}
+	}
+	return root;
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+    int d;
+    cout<<"depth:"<<endl;
+    cin>>d;
+    cout<<"Nodes"<<endl;
+	depthNode(root,d);
+	return 0;
+}
+
+Output:
+10 3 20 30 40 2 40 50 0 0 0 0
+depth:
+1
+Nodes
+20, 30, 40,

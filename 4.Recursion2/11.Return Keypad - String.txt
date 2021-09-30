@@ -1,0 +1,55 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Return Keypad - String
+Problem Level: HARD
+Problem Description:
+Given an integer n, using phone keypad find out all the possible strings that can be made using digits of input n.
+Return empty string for numbers 0 and 1.
+Note : 1. The order of strings are not important.
+2. Input and output has already been managed for you. You just have to populate the output array and return the count of elements populated in the output array.
+Input Format :
+Integer n
+
+Output Format :
+All possible strings in different lines
+
+Constraints :
+1 <= n <= 10^6
+
+Sample Input:
+23
+
+Sample Output:
+ad
+ae
+af
+bd
+be
+bf
+cd
+ce
+cf
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+void func(int num,string arr[],string output){
+	if(num==0 || num==1){
+		cout<<output<<endl;
+		return;
+	}
+	string pd=arr[(num%10)-1];
+	for(int i=0;i<pd.length();i++){
+		func(num/10,arr,pd[i]+output);
+	}
+}
+int main() {
+	int num;
+    cin>>num;
+    string arr[9]={"","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+    func(num,arr,"");
+    return 0;
+}

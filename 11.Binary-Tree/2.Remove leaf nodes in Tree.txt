@@ -1,0 +1,114 @@
+@csalgo
+
+Chapter TEST
+Problem Statement: Remove leaf nodes in Tree
+Problem Level: MEDIUM
+Problem Description:
+Remove all leaf nodes from a given generic Tree. Leaf nodes are those nodes, which don't have any children.
+Note : Root will also be a leaf node if it doesn't have any child. You don't need to print the tree, just remove all leaf nodes and return the updated root.
+Input format :
+Line 1 : Elements in level order form separated by space (as per done in class). Order is - `
+
+Root_data, n (No_Of_Child_Of_Root), n children, and so on for every element `
+
+Output Format :
+Elements are printed level wise, each level in new line (separated by space)
+
+Sample Input 1 :
+10 3 20 30 40 2 40 50 0 0 0 0
+
+Sample Output 1 : (Level wise, each level in new line)
+10
+20
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTreeWise(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	pendingNodes.push(NULL);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		if(front==NULL){
+			cout<<endl;
+			if(pendingNodes.size()!=0)
+				pendingNodes.push(NULL);
+		}
+		if(front!=NULL){
+			cout<<front->data<<" ";
+			if(front->left)
+				pendingNodes.push(front->left);
+			if(front->right)
+				pendingNodes.push(front->right);
+		}
+	}
+}
+
+TreeNode<int>* removeLeaf(TreeNode<int>* root){
+	if(root==NULL || root->left==NULL && root->right==NULL)
+		return NULL;
+	root->left=removeLeaf(root->left);
+	root->right=removeLeaf(root->right);
+	return root;
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	cout<<"Tree: \n";
+	removeLeaf(root);
+	printTreeWise(root);
+}

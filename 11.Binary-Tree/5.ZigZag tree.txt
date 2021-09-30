@@ -1,0 +1,113 @@
+@csalgo
+
+Chapter Assignment
+Problem Statement: ZigZag tree
+Problem Level: HARD
+Problem Description:
+Given a binary tree, print the zig zag order i.e print level 1 from left to right, level 2 from right to left and so on. This means odd levels should get printed from left to right and even level right to left.
+Input format :
+Elements in level order form (separated by space)
+(If any node does not have left or right child, take -1 in its place)
+Output Format :
+Elements are printed level wise, each level in new line (separated by space).
+
+Sample Input :
+5 6 10 2 3 -1 -1 -1 -1 -1 9 -1 -1
+
+Sample Output :
+5
+10 6
+2 3
+9
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTreeWise(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	stack<TreeNode<int>*> current;
+	stack<TreeNode<int>*> next;
+	current.push(root);
+	bool leftToRight=true;
+	while(!current.empty()){
+		TreeNode<int>* top=current.top();
+		current.pop();
+		if(top){
+			cout<<top->data<<" ";
+			if(leftToRight){
+				if(top->left)
+					next.push(top->left);
+				if(top->right)
+					next.push(top->right);
+			}
+			else{
+				if(top->right)
+					next.push(top->right);
+				if(top->left)
+					next.push(top->left);
+			}
+		}
+		if(current.empty()){
+			cout<<endl;
+			leftToRight=!leftToRight;
+			swap(current,next);
+		}
+	}
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	cout<<"Tree: \n";
+	printTreeWise(root);
+}

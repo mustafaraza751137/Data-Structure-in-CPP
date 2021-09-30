@@ -1,0 +1,173 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Height Of Tree
+Problem Level: EASY
+Problem Description:
+For a given Binary Tree of integers, find and return the height of the tree.
+Example:
+                        10
+                      /      \
+                    20      30
+                   /    \
+                 40    50
+
+Height of the given tree is 3.
+
+Height is defined as the total number of nodes along the longest path from the root to any of the leaf node.
+
+Input Format:
+The first and the only line of input will contain the node data, all separated by a single space. Since -1 is used as an indication whether the left or right node data exist for root, it will not be a part of the node data.
+
+Output Format:
+The first and the only line of output prints the height of the given binary tree.
+
+Note:
+You are not required to print anything explicitly. It has already been taken care of.
+
+Constraints:
+0 <= N <= 10^5
+Where N is the total number of nodes in the binary tree.
+
+Time Limit: 1 sec
+
+Sample Input 1:
+10 20 30 40 50 -1 -1 -1 -1 -1 -1
+
+Sample Output 1:
+3
+
+Sample Input 2:
+3 -1 -1
+
+Sample Output 2:
+1
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTree(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cout<<front->data<<" L: ";
+		if(front->left!=NULL)
+			cout<<front->left->data;
+		else
+			cout<<"-1";
+		cout<<" R: ";
+		if(front->right!=NULL)
+			cout<<front->right->data<<endl;
+		else
+			cout<<"-1"<<endl;
+		pendingNodes.push(front->left);
+		pendingNodes.push(front->right);
+	}
+}
+
+int findHeight(TreeNode<int>* root){
+	if(root==NULL)
+		return 0;
+	int h1=findHeight(root->left);
+	int h2=findHeight(root->right);
+	if(h1>h2)
+		return h1+1;
+	else
+		return h2+1;
+}
+int height(TreeNode<int>* root){
+
+	//Initialising a variable to count the
+	//height of tree
+	int depth = 0;
+
+	queue<TreeNode<int>*>q;
+	
+	//Pushing first level element along with NULL
+	q.push(root);
+	q.push(NULL);
+	while(!q.empty()){
+		TreeNode<int>* temp = q.front();
+		q.pop();
+	
+		//When NULL encountered, increment the value,
+		//count NULL
+		if(temp == NULL){
+			depth++;
+		}
+		//If NULL not encountered, keep moving
+		if(temp != NULL){
+			if(temp->left){
+				q.push(temp->left);
+			}
+			if(temp->right){
+				q.push(temp->right);
+			}
+		}
+	
+		//If queue still have elements left,
+		//push NULL again to the queue.
+		//NULL after every level
+		else if(!q.empty()){
+			q.push(NULL);
+		}
+	}
+	return depth;
+}
+
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	// printTree(root);
+	cout<<findHeight(root)<<endl;
+	cout<<height(root)<<endl;
+}

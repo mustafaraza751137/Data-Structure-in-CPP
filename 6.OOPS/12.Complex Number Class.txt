@@ -1,0 +1,98 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Complex Number Class
+Problem Level: MEDIUM
+Problem Description:
+A ComplexNumber class contains two data members : one is the real part (R) and the other is imaginary (I) (both integers).
+Implement the Complex numbers class that contains following functions -
+1. constructor
+You need to create the appropriate constructor.
+2. plus -
+This function adds two given complex numbers and updates the first complex number.
+e.g.
+if C1 = 4 + i5 and C2 = 3 +i1
+C1.plus(C2) results in: 
+C1 = 7 + i6 and C2 = 3 + i1
+
+3. multiply -
+This function multiplies two given complex numbers and updates the first complex number.
+e.g.
+if C1 = 4 + i5 and C2 = 1 + i2
+C1.multiply(C2) results in: 
+C1 = -6 + i13 and C2 = 1 + i2
+
+4. print -
+This function prints the given complex number in the following format :
+a + ib
+
+Note : There is space before and after '+' (plus sign) and no space between 'i' (iota symbol) and b.
+Input Format :
+Line 1 : Two integers - real and imaginary part of 1st complex number
+Line 2 : Two integers - real and imaginary part of 2nd complex number
+Line 3 : An integer representing choice (1 or 2) (1 represents plus function will be called and 2 represents multiply function will be called)
+
+Output format :
+Check details of 'print' function given above.
+
+Sample Input 1 :
+4 5
+6 7
+1
+
+Sample Output 1 :
+10 + i12
+
+Sample Input 2 :
+4 5
+6 7
+2
+
+Sample Output 2 :
+-11 + i58
+
+@csalgo
+
+
+#include <bits/stdc++.h>
+using namespace std;
+class Complex{
+	private:
+		int real;
+		int img;
+	public:
+		Complex(int real,int img){
+			this -> real = real;
+			this -> img = img;
+		}
+		void print(){
+			if(img>=0)
+				cout<<real<<" + i"<<img<<endl;
+			else
+				cout<<real<<" - i"<<-img<<endl;
+		}
+		void plus(Complex c){			//Here copy constructor called fraction c = main.c2;	
+			real = real + c.real;
+			img = img + c.img;
+		}
+		void multiply(Complex const &c){	//To avoid another copy of c2, const is used so that we can't change value of c2, c is const (read only);
+			int t=real;
+			real = real*c.real - img*c.img;
+			img = t*c.img + img*c.real;
+		}
+};
+int main(){
+	int i,ch;
+	int real1,real2,img1,img2;
+	cin>>real1>>img1;
+	Complex c1(real1,img1);
+	cin>>real2>>img2;
+	Complex c2(real2,img2);
+	
+	cin>>ch;
+	if(ch==1)
+		c1.plus(c2);			//Call add function of c1 and pass c2
+	else
+		c1.multiply(c2);
+	c1.print();
+}

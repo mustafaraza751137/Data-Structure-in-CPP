@@ -1,0 +1,167 @@
+@csalgo
+
+Assignment Problem
+Problem Name: Stack implementation
+Problem Description:
+Which of the following operation take worst case i.e. linear time (O(n)) in the array implementation of stack?
+Options:
+0. Push
+1. Pop
+2. IsEmpty
+3. None
+
+
+
+=====Answer=====
+Correct Option: 3
+
+@csalgo
+
+
+//Static
+
+#include<bits/stdc++.h>
+using namespace std;
+class Stack{
+	int capacity;
+	int *arr;
+	int top;
+	public:
+		Stack(int size){
+			capacity=size;
+			arr=new int[size];
+			top=0;
+		}
+
+		int size(){
+			return top;
+		}
+
+		void push(int element){
+			if(top==capacity){
+				cout<<"Stack is full";
+				return;
+			}
+			arr[top]=element;
+			top++;
+		}
+
+		int pop(){
+			if(top==-1){
+				cout<<"Stack is empty\n";
+				return INT_MIN;
+			}
+			top--;
+			return arr[top];
+		}
+
+		int peek(){
+			if(top==-1){
+				cout<<"Stack is empty\n";
+				return INT_MIN;
+			}
+			return arr[top-1];
+		}
+
+		bool isEmpty(){
+			return top==0;
+		}
+
+		bool isFull(){
+			return top==capacity;
+		}
+};
+
+int main(){
+	int t;
+	cin>>t;
+	for(int i=0;i<t;i++){
+		int n,element;
+		cout<<"enter size of stack\n";
+		cin>>n;
+		Stack obj(n);
+		for(int i=0;i<n;i++){
+			cin>>element;
+			obj.push(element);
+		}
+		cout<<obj.peek()<<endl;
+		cout<<obj.pop()<<endl;
+		cout<<obj.pop()<<endl;
+		cout<<obj.size()<<endl;
+		cout<<obj.peek()<<endl;
+		cout<<obj.isEmpty()<<endl;
+	}
+}
+
+//Dynamic
+#include<bits/stdc++.h>
+using namespace std;
+class Stack{
+	int capacity;
+	int *arr;
+	int top;
+	public:
+		Stack(){
+			capacity=5;
+			arr=new int[5];
+			top=0;
+		}
+
+		int size(){
+			return top;
+		}
+
+		void push(int element){
+			if(top==capacity){
+				int *newArr=new int[2*capacity];
+				for(int i=0;i<capacity;i++)
+					newArr[i]=arr[i];
+				delete []arr;
+				arr=newArr;
+				capacity*=2;
+			}
+			arr[top]=element;
+			top++;
+		}
+
+		int pop(){
+			if(top==-1){
+				cout<<"Stack is empty\n";
+				return INT_MIN;
+			}
+			top--;
+			return arr[top];
+		}
+
+		int peek(){
+			if(top==-1){
+				cout<<"Stack is empty\n";
+				return INT_MIN;
+			}
+			return arr[top-1];
+		}
+
+		bool isEmpty(){
+			return top==0;
+		}
+};
+
+int main(){
+	int t;
+	cin>>t;
+	for(int i=0;i<t;i++){
+		int element;
+		Stack obj;
+		cin>>element;
+		while(element!=-1){
+			obj.push(element);
+			cin>>element;
+		}
+		cout<<obj.peek()<<endl;
+		cout<<obj.pop()<<endl;
+		cout<<obj.pop()<<endl;
+		cout<<obj.size()<<endl;
+		cout<<obj.peek()<<endl;
+		cout<<obj.isEmpty()<<endl;
+	}
+}

@@ -1,0 +1,84 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Merge Sort
+Problem Level: MEDIUM
+Problem Description:
+Sort an array A using Merge Sort.
+Change in the input array itself. So no need to return or print anything.
+Input format :
+Line 1 : Integer n i.e. Array size
+Line 2 : Array elements (separated by space)
+
+Output format :
+Array elements in increasing order (separated by space)
+
+Constraints :
+1 <= n <= 10^3
+
+Sample Input 1 :
+6 
+2 6 8 5 4 3
+
+Sample Output 1 :
+2 3 4 5 6 8
+
+Sample Input 2 :
+5
+2 1 5 2 3
+
+Sample Output 2 :
+1 2 2 3 5
+
+@csalgo
+
+#include<bits/stdc++.h>
+using namespace std;
+void merge(int *arr,int low,int mid,int high){
+	int *c=new int[high+1];
+	int i=low;
+	int j=low;
+	int k=mid+1;
+	while(i<=mid && k<=high){
+		if(arr[i]>arr[k]){
+			c[j]=arr[k];
+			k++;
+		}
+		else{
+			c[j]=arr[i];
+			i++;
+		}
+		j++;
+	}
+	while(i<=mid){
+		c[j]=arr[i];
+		i++;
+		j++;
+	}
+	while(k<=high){
+		c[j]=arr[k];
+		k++;
+		j++;
+	}
+	for(i=low;i<j;i++)
+		arr[i]=c[i];
+}
+void func(int *arr,int i,int l){
+	if(i>=l)
+		return;
+	int mid=(i+l)/2;
+	func(arr,i,mid);
+	func(arr,mid+1,l);
+	merge(arr,i,mid,l);
+}
+int main() {
+    int n;
+    cin>>n;
+    int *arr=new int[n];
+    for(int i=0;i<n;i++)
+    	cin>>arr[i];
+    func(arr,0,n-1);
+    for(int i=0;i<n;i++)
+    	cout<<arr[i]<<" ";
+	return 0;
+}

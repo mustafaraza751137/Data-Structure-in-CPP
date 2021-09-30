@@ -1,0 +1,135 @@
+@csalgo
+
+Chapter Assignment
+Problem Statement: Pair sum BInary Tree
+Problem Level: MEDIUM
+Problem Description:
+Given a binary tree and an integer S, print all the pair of nodes whose sum equals S.
+Assume binary tree contains all unique elements.
+Note : In a pair, print the smaller element first. Order of different pair doesn't matter.
+Input format :
+Line 1 : Elements in level order form (separated by space)
+(If any node does not have left or right child, take -1 in its place)
+Line 2 : Integer S
+
+Output Format :
+Each pair in different line (pair elements separated by space)
+
+Constraints :
+1 <= N <= 1000
+
+Sample Input 1:
+5 10 6 2 3 -1 -1 -1 -1 -1 9 -1 -1
+15
+
+Sample Output 1:
+5 10
+6 9
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTreeWise(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	pendingNodes.push(NULL);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		if(front==NULL){
+			cout<<endl;
+			if(pendingNodes.size()!=0)
+				pendingNodes.push(NULL);
+		}
+		if(front!=NULL){
+			cout<<front->data<<" ";
+			if(front->left)
+				pendingNodes.push(front->left);
+			if(front->right)
+				pendingNodes.push(front->right);
+		}
+	}
+}
+TreeNode<int>* preorder(TreeNode<int>* root,vector<int> &pre){
+	if(root==NULL)
+		return NULL;
+	pre.push_back(root->data);
+	root->left=preorder(root->left,pre);
+	root->right=preorder(root->right,pre);
+	return root;
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	int sum;
+	cin>>sum;
+	cout<<"Tree: \n";
+	vector<int> pre;
+	preorder(root,pre);
+	// printTreeWise(root);
+	sort(pre.begin(),pre.end());
+	int i=0,j=pre.size()-1;
+	while(i<j){
+		if((pre[i]+pre[j])==sum){
+			cout<<pre[i]<<" "<<pre[j]<<endl;
+			i++;
+			j--;
+		}
+		else if(pre[i]+pre[j]>sum)
+			j--;
+		else
+			i++;
+	}
+}

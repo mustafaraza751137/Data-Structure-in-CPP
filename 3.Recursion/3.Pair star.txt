@@ -1,0 +1,62 @@
+@csalgo
+
+Chapter Assignment
+Problem Statement: Pair star
+Problem Level: MEDIUM
+Problem Description:
+Given a string S, compute recursively a new string where identical chars that are adjacent in the original string are separated from each other by a "*".
+Input format :
+String S
+
+Output format :
+Modified string
+
+Constraints :
+0 <= |S| <= 1000
+where |S| represents length of string S.
+
+Sample Input 1 :
+hello
+
+Sample Output 1:
+hel*lo
+
+Sample Input 2 :
+aaaa
+
+Sample Output 2 :
+a*a*a*a
+
+
+
+=====Answer=====
+Correct Option: 
+
+@csalgo
+
+#include<bits/stdc++.h>
+using namespace std;
+void func(char *arr,int l){
+	if(l==0)
+		return;
+	if(arr[0]==arr[1]){
+		for(int j=l-1;j>0;j--){
+			arr[j+1]=arr[j];
+		}
+		arr[1]='*';
+		arr+=1;
+	}
+	func(arr+1,l-1);
+}
+int main() {
+    string s;
+    cin>>s;
+    int l=s.length();
+    char *arr=new char[l];
+    for(int i=0;i<l;i++){
+    	arr[i]=s[i];
+    }
+    func(arr,l);
+    cout<<arr;
+	return 0;
+}

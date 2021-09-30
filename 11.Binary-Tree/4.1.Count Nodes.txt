@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+template<typename T>
+class TreeNode{
+	public:
+		T data;
+		TreeNode<T>* left;
+		TreeNode<T>* right;
+		TreeNode(T data){
+			this->data=data;
+			left=NULL;
+			right=NULL;
+		}
+		~TreeNode(){
+			delete left;
+			delete right;
+		}
+};
+
+TreeNode<int>* takeInput(){
+	int data;
+	cin>>data;
+	TreeNode<int>* root=new TreeNode<int>(data);
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* leftNode=new TreeNode<int>(data);
+			front->left=leftNode;
+			pendingNodes.push(front->left);
+		}
+		cin>>data;
+		if(data!=-1){
+			TreeNode<int>* rightNode=new TreeNode<int>(data);
+			front->right=rightNode;
+			pendingNodes.push(front->right);
+		}
+	}
+	return root;
+}
+
+void printTree(TreeNode<int>* root){
+	if(root==NULL)
+		return;
+	queue<TreeNode<int>*> pendingNodes;
+	pendingNodes.push(root);
+	while(pendingNodes.size()!=0){
+		TreeNode<int>* front=pendingNodes.front();
+		pendingNodes.pop();
+		cout<<front->data<<" L: ";
+		if(front->left!=NULL)
+			cout<<front->left->data;
+		else
+			cout<<"-1";
+		cout<<" R: ";
+		if(front->right!=NULL)
+			cout<<front->right->data<<endl;
+		else
+			cout<<"-1"<<endl;
+		pendingNodes.push(front->left);
+		pendingNodes.push(front->right);
+	}
+}
+
+int countNode(TreeNode<int>* root){
+	if(root==NULL)
+		return 0;
+	return 1+countNode(root->left)+countNode(root->right);
+}
+
+int main(){
+	TreeNode<int>* root=takeInput();
+	// printTree(root);
+	cout<<countNode(root)<<endl;
+}

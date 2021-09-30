@@ -1,0 +1,192 @@
+@csalgo
+
+Coding Problem
+Problem Statement: Polynomial class
+Problem Level: MEDIUM
+Problem Description:
+Implement a polynomial class, with following properties and functions.
+Properties :
+1. An integer (lets say A) which holds the coefficient and degrees. Use array indices as degree and A[i] as coefficient of ith degree.
+2. An integer holding total size of array A.
+Functions :
+1. Default constructor
+2. Copy constructor
+3. setCoefficient -
+This function sets coefficient for a particular degree value. If the given degree is greater than the current capacity of polynomial, increase the capacity accordingly and add then set the required coefficient. If the degree is within limits, then previous coefficient value is replaced by given coefficient value
+4. Overload "+" operator  (P3 = P1 + P2) :
+Adds two polynomials and returns a new polynomial which has result.
+5. Overload "-" operator  (P3 = p1 - p2) :
+Subtracts two polynomials and returns a new polynomial which has result
+6. Overload * operator (P3 = P1 * P2) :
+Multiplies two polynomials and returns a new polynomial which has result
+7. Overload "=" operator (Copy assignment operator) -
+Assigns all values of one polynomial to other.
+8. print() -
+Prints all the terms (only terms with non zero coefficients are to be printed) in increasing order of degree.
+Print pattern for a single term : \<coefficient>"x"\<degree>
+And multiple terms should be printed separated by space. And after printing one polynomial, print new line. For more clarity, refer sample test cases
+Input Format :
+Line 1 : N, total number of terms in polynomial P1
+Line 2 : N integers representing degree of P1 (separated by space)
+Line 3 : N integers representing coefficients of P1 (separated by space)
+Line 4 : M, total number of terms in polynomial P2
+Line 5 : M integers representing degree of P2 (separated by space)
+Line 6 : M integers representing coefficients of P2 (separated by space)
+Line 7 : Integer C, choice representing the function to be called (See main for more details)
+
+Sample Input 1 :
+3
+1 3 5
+1 2 -4
+4
+0 1 2 3
+4 2 -3 1
+1
+
+Sample Output 1 :
+4x0 3x1 -3x2 3x3 -4x5
+
+Sample Input 2 :
+3
+1 3 5
+1 2 -4
+4
+0 1 2 3
+4 2 -3 1
+2
+
+Sample Output 2 :
+-4x0 -1x1 3x2 1x3 -4x5
+
+Sample Input 3 :
+3
+1 3 5
+1 2 -4
+4
+0 1 2 3
+4 2 -3 1
+3
+
+Sample Output 3 :
+4x1 2x2 5x3 5x4 -22x5 -6x6 12x7 -4x8
+
+@csalgo
+
+
+#include <bits/stdc++.h>
+using namespace std;
+class Polynomial{
+	int *data;
+	int capacity;
+	public:
+		//1. Default constructor
+		Polynomial(){
+			data = new int[5];
+			capacity = 5;
+			for(int i=0;i<5;i++)
+				data[i]=0;
+		}
+		//2. copy constructor
+		Polynomial (Polynomial const &p){
+			//Deep copy
+			this->data = new int[p.capacity];
+			for(int i=0;i<p.capacity;i++)
+				this->data[i] = p.data[i];
+			this->capacity = p.capacity;
+		}
+		//3. Set Coefficient
+		void setCoefficient(int deg,int coeff){
+			if(deg>=capacity){
+				int *newData = new int[2*capacity];		//new array of double capacity
+				for(int i=0;i<capacity;i++)
+					newData[i] = data[i];
+				for(int i=capacity;i<2*capacity;i++)
+					newData[i] = 0;
+				delete [] data;				//delete previous array
+				data = newData;				//points data pointer to this new array
+				capacity *= 2;
+			}
+			data[deg]=coeff;
+		}
+		//4. operator + overloading
+		void operator+(Polynomial const &p){
+			int i=0;
+			while(i<capacity && i<p.capacity){
+				data[i]+=p.data[i];
+				i++;
+			}
+		}
+		//5. operator - overloading
+		void operator-(Polynomial const &p){
+			int i=0;
+			while(i<capacity && i<p.capacity){
+				data[i]-=p.data[i];
+				i++;
+			}
+		}
+		//6. operator * overloading
+		void operator*(Polynomial const &p){
+			int size=capacity+p.capacity-1;
+			int *prod=new int[size];	//size product of 2 m,n polynomial = m+n-1
+			for(int i=0;i<size;i++)
+				prod[i]=0;
+			for(int i=0;i<capacity;i++)
+				for(int j=0;j<p.capacity;j++)
+					prod[i+j]+=data[i]*p.data[j];
+			delete []data;
+			data=prod;
+			capacity=size;
+		}
+		//7. operator = overloading
+		void operator=(Polynomial const &p){
+			this->data = new int[p.capacity];
+			for(int i=0;i<p.capacity;i++)
+				this->data[i] = p.data[i];
+			this->capacity = p.capacity;
+		}
+		//8. print
+		void print() const{
+			for(int i=0;i<capacity;i++)
+				if(data[i]!=0)
+					cout<<data[i]<<"x^"<<i<<" ";
+			cout<<endl;
+		}
+};
+int main(){
+	int n,m,coeff,ch;
+	Polynomial p1,p2;
+	cin>>n;
+	int *deg=new int[n];
+	for(int i=0;i<n;i++)
+		cin>>deg[i];
+	for(int i=0;i<n;i++){
+		cin>>coeff;
+		p1.setCoefficient(deg[i],coeff);
+	}
+	cin>>m;
+	deg=new int[m];
+	for(int i=0;i<m;i++)
+		cin>>deg[i];
+	for(int i=0;i<m;i++){
+		cin>>coeff;
+		p2.setCoefficient(deg[i],coeff);
+	}
+	cin>>ch;
+	switch(ch){
+		case 1:
+			p1+p2;
+			break;
+		case 2:
+			p1-p2;
+			break;
+		case 3:
+			p1*p2;
+			break;
+		case 4:
+			p1=p2;
+			break;
+		default:
+			cout<<"Wrong Choice"<<endl;
+	}
+	p1.print();
+}

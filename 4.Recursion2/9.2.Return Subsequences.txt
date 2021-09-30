@@ -1,0 +1,47 @@
+Return Subsequences
+
+#include<bits/stdc++.h>
+using namespace std;
+int func(string s,string arr[]){
+	if(s.empty()){
+		arr[0]="";
+		return 1;
+	}
+	string smallstring=s.substr(1);
+	int smallsize=func(smallstring,arr);
+	for(int i=0;i<smallsize;i++){
+		arr[i+smallsize]=s[0]+arr[i];
+	}
+	return 2*smallsize;
+}
+int main() {
+    string s;
+    cin>>s;
+    int l=s.length();
+    int size=pow(2,l);
+    string *arr=new string[size];
+    size=func(s,arr);
+    for(int i=0;i<size;i++)
+    	cout<<arr[i]<<endl;
+    return 0;
+}
+
+or
+
+
+#include<bits/stdc++.h>
+using namespace std;
+void func(string input,string output){
+	if(input.empty()){
+		cout<<output<<endl;
+		return;
+	}
+	func(input.substr(1),output);
+	func(input.substr(1),input[0]+output);
+}
+int main() {
+	string input;
+    cin>>input;
+    func(input,"");
+    return 0;
+}
